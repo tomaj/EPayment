@@ -1,0 +1,245 @@
+//  Copyright 2009 MONOGRAM Technologies
+//  
+//  This file is part of MONOGRAM EPayment libraries
+//  
+//  MONOGRAM EPayment libraries is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU Lesser General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  MONOGRAM EPayment libraries is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU Lesser General Public License for more details.
+//
+//  You should have received a copy of the GNU Lesser General Public License
+//  along with MONOGRAM EPayment libraries.  If not, see <http://www.gnu.org/licenses/>.
+
+using System.Text.RegularExpressions;
+using System.Text;
+using System.Web;
+using System.Collections.Generic;
+using System.IO;
+namespace Monogram.EPayment.Merchant.VUB.EPlatba2HMAC
+{
+  /// <summary>
+  /// Trieda vytvárajúca payment request protokolu VÚB EPlatba z roku 2010 vyuívajúceho HMAC podpisovanie správ
+  /// </summary>
+  public class EPlatbaPaymentRequest : EPaymentHmacSignedMessage, IPaymentRequest, IHttpPostPaymentRequest
+  {
+    #region required fields
+    protected string mid = null;
+    /// <summary>
+    /// Merchant ID
+    /// </summary>
+    public string Mid
+    {
+      get { return mid; }
+      set { mid = value; }
+    }
+
+    /// <summary>
+    /// Variabilnı symbol
+    /// </summary>
+    public string Vs
+    {
+      get { return vs; }
+      set { vs = value; }
+    }
+
+    protected double amt = 0;
+    /// <summary>
+    /// Suma
+    /// </summary>
+    public double Amt
+    {
+      get { return amt; }
+      set { amt = value; }
+    }
+    public string StrAmt
+    {
+      get { return amt.ToString("0.00").Replace(',', '.'); }
+    }
+
+    //protected string vs = null;
+    //public string Vs
+    //{
+    //  get { return vs; }
+    //  set { vs = value; }
+    //}
+
+    protected string cs = null;
+    /// <summary>
+    /// Konštantnı symbol
+    /// </summary>
+    public string Cs
+    {
+      get { return cs; }
+      set { cs = value; }
+    }
+
+    protected string rurl = null;
+    /// <summary>
+    /// Návratová URL, na ktorú bude zaslanı payment response
+    /// </summary>
+    public string Rurl
+    {
+      get { return rurl; }
+      set { rurl = value; }
+    }
+    #endregion
+
+    #region optional fields
+    protected string ss = null;
+    /// <summary>
+    /// (nepovinné) Špecifickı symbol
+    /// </summary>
+    public string Ss
+    {
+      get { return ss; }
+      set { ss = value; }
+    }
+
+    protected string desc = null;
+    /// <summary>
+    /// (nepovinné) Popis platby
+    /// </summary>
+    public string Desc
+    {
+      get { return desc; }
+      set { desc = value; }
+    }
+
+    protected string rem = null;
+    /// <summary>
+    /// (nepovinné) E-mailová adresa obchodníka, na ktorú bude zaslané potvrdenie o platba
+    /// </summary>
+    public string Rem
+    {
+      get { return rem; }
+      set { rem = value; }
+    }
+
+    protected string rsms = null;
+    /// <summary>
+    /// (nepovinné) Èíslo obchodníka, na ktoré bude zaslaná SMS s potvrdením o platbe
+    /// </summary>
+    public string Rsms
+    {
+      get { return rsms; }
+      set { rsms = value; }
+    }
+    #endregion
+
+    /// <summary>
+    /// URL adresa, na ktorú sa posielajú payment requesty v produkènej prevádzke
+    /// </summary>
+    public const string DefaultUrlBase = "https://ib.vub.sk/e-platbyeuro.aspx";
+    protected string urlBase = DefaultUrlBase;
+    /// <summary>
+    /// URL, na ktorú bude zaslanı payment request. Túto hodnotu je moné zmeni na URL EPayment simulátora, ktorım môete otestova vıslednú aplikáciu.
+    /// </summary>
+    public string UrlBase
+    {
+      get { return urlBase; }
+      set { urlBase = value; }
+    }
+
+    /// <summary>
+    /// Odtlaèok payment requestu
+    /// </summary>
+    public override string SignatureBase
+    {
+      get { return string.Format("{0}{1}{2}{3}{4}{5}", mid, StrAmt, vs, ss, cs, rurl); }
+    }
+
+    /// <summary>
+    /// Metóda validujúca formát payment requestu
+    /// </summary>
+    /// <returns>True ak je správa valídna, inak false</returns>
+    public override bool Validate()
+    {
+      if (mid == null) return false;
+      if (mid.Length > 20) return false;
+      if (StrAmt.Length > 13) return false;
+      if (StrAmt.IndexOf(',') != -1) return false;
+      if (vs == null) vs = string.Empty;
+      if (vs.Length > 10) return false;
+      if (cs == null) cs = string.Empty;
+      if (cs.Length > 4) return false;
+      if (rurl == null) return false;
+      if (!(new Regex(@"^https?://.+$", RegexOptions.IgnoreCase).IsMatch(rurl))) return false;
+
+      return true;
+    }
+
+    /// <summary>
+    /// Metóda vracajúca všetky hodnoty parametrov payment request-u
+    /// </summary>
+    /// <returns></returns>
+    public Dictionary<string, string> GetPaymentRequestFields()
+    {
+      Dictionary<string, string> result = new Dictionary<string, string>();
+
+      result["MID"] = Mid;
+      result["AMT"] = StrAmt;
+      result["VS"] = Vs;
+      result["CS"] = Cs;
+      result["RURL"] = Rurl;
+      result["SIGN"] = Signature;
+
+      if (Ss != null)
+      {
+        result["SS"] = Ss;
+      }
+
+      if (Desc != null)
+      {
+        result["DESC"] = Desc;
+      }
+
+      if (Rem != null)
+      {
+        result["REM"] = Rem;
+      }
+
+      if (Rsms != null)
+      {
+        result["RSMS"] = Rsms;
+      }
+
+      return result;
+    }
+
+    /// <summary>
+    /// Metóda do TextWriter-a vpíše prvky XHTML formulára nesúce informácie o payment requeste.
+    /// Pouívanie tejto metódy je odporúèané ak potrebujete na vıslednej stránke sami implementova
+    /// odosielanie formulára alebo vıslednú stránku prispôsobova vo vyššej miere.
+    /// </summary>
+    /// <param name="tw">TextWriter, do ktorého sa vypíše vıstup.</param>
+    public void RenderPaymentRequestFields(TextWriter tw)
+    {
+      Dictionary<string, string> paymentRequestFields = GetPaymentRequestFields();
+      foreach (string key in paymentRequestFields.Keys)
+      {
+        tw.Write("<input type=\"hidden\" name=\"");
+        tw.Write(HttpUtility.HtmlEncode(key));
+        tw.Write("\" value=\"");
+        tw.Write(HttpUtility.HtmlEncode(paymentRequestFields[key]));
+        tw.Write("\" />");
+      }
+    }
+
+    /// <summary>
+    /// Metóda do TextWriter-a vpíše XHTML formulár s informáciami o payment requeste.
+    /// </summary>
+    /// <param name="tw">TextWriter, do ktorého sa vypíše vıstup.</param>
+    public void RenderPaymentRequestForm(TextWriter tw)
+    {
+      tw.Write("<form action=\""); tw.Write(HttpUtility.HtmlEncode(UrlBase)); tw.Write("\" method=\"post\">");
+      RenderPaymentRequestFields(tw);
+      tw.Write("<input type=\"submit\" value=\"Send payment request\" />");
+      tw.Write("</form>");
+    }
+  }
+}

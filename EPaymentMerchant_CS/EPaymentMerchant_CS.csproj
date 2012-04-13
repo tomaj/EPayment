@@ -1,0 +1,84 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{70BEE985-F3A6-43F8-BD9B-E5F7A978E099}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Monogram.EPayment.Merchant</RootNamespace>
+    <AssemblyName>EPaymentMerchant</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IHttpPostPaymentRequest.cs" />
+    <Compile Include="EPaymentHmacSignedMessage.cs" />
+    <Compile Include="EPaymentDesSignedMessage.cs" />
+    <Compile Include="EPaymentMessage.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="IHttpRedirectPaymentRequest.cs" />
+    <Compile Include="IPaymentRequest.cs" />
+    <Compile Include="ISignedResponse.cs" />
+    <Compile Include="ISO4217Currency.cs" />
+    <Compile Include="PaymentResponse.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SLSP_SporoPay\SporoPayAuthorizationType.cs" />
+    <Compile Include="SLSP_SporoPay\SporoPayClientNotification.cs" />
+    <Compile Include="SLSP_SporoPay\SporoPayMessage.cs" />
+    <Compile Include="SLSP_SporoPay\SporoPayPaymentHttpResponse.cs" />
+    <Compile Include="SLSP_SporoPay\SporoPayPaymentRealResult.cs" />
+    <Compile Include="SLSP_SporoPay\SporoPayPaymentRequest.cs" />
+    <Compile Include="SLSP_SporoPay\SporoPayPaymentResult.cs" />
+    <Compile Include="TB_CardPay\CardPayLanguage.cs" />
+    <Compile Include="TB_CardPay\CardPayPaymentHttpResponse.cs" />
+    <Compile Include="TB_CardPay\CardPayPaymentRequest.cs" />
+    <Compile Include="TB_CardPay\CardPayPaymentResult.cs" />
+    <Compile Include="TB_CardPay\CardPayPaymentType.cs" />
+    <Compile Include="TB_TatraPay\TatraPayLanguage.cs" />
+    <Compile Include="TB_TatraPay\TatraPayPaymentHttpResponse.cs" />
+    <Compile Include="TB_TatraPay\TatraPayPaymentRequest.cs" />
+    <Compile Include="TB_TatraPay\TatraPayPaymentResult.cs" />
+    <Compile Include="TB_TatraPay\TatraPayPaymentType.cs" />
+    <Compile Include="UCB_UniPlatba\UniPlatbaPaymentHttpResponse.cs" />
+    <Compile Include="UCB_UniPlatba\UniPlatbaPaymentLanguage.cs" />
+    <Compile Include="UCB_UniPlatba\UniPlatbaPaymentRequest.cs" />
+    <Compile Include="UCB_UniPlatba\UniPlatbaResponse.cs" />
+    <Compile Include="VUB_EPlatba2_HMAC\EPlatbaPaymentHttpResponse.cs" />
+    <Compile Include="VUB_EPlatba2_HMAC\EPlatbaPaymentRequest.cs" />
+    <Compile Include="VUB_EPlatba2_HMAC\EPlatbaPaymentResult.cs" />
+    <Compile Include="VUB_EPlatba\EPlatbaPaymentHttpResponse.cs" />
+    <Compile Include="VUB_EPlatba\EPlatbaPaymentRequest.cs" />
+    <Compile Include="VUB_EPlatba\EPlatbaPaymentResult.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
