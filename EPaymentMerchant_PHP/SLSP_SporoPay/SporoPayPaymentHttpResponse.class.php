@@ -46,19 +46,19 @@ class SporoPayPaymentHttpResponse extends EPayment3DesSignedMessage implements I
     }
 
     protected function validateData() {
-        if (!ereg('^[0-9]*$', $this->u_predcislo)) return false;
-        if (!ereg('^[0-9]+$', $this->u_cislo)) return false;
-        if (!ereg('^[0-9]+$', $this->u_kbanky)) return false;
+        if (!preg_match('/^[0-9]*$/', $this->u_predcislo)) return false;
+        if (!preg_match('/^[0-9]+$/', $this->u_cislo)) return false;
+        if (!preg_match('/^[0-9]+$/', $this->u_kbanky)) return false;
 
-        if (!ereg('^[0-9]*$', $this->pu_predcislo)) return false;
-        if (!ereg('^[0-9]+$', $this->pu_cislo)) return false;
+        if (!preg_match('/^[0-9]*$/', $this->pu_predcislo)) return false;
+        if (!preg_match('/^[0-9]+$/', $this->pu_cislo)) return false;
         if ($this->pu_kbanky != '0900') return false;
 
-        if (!ereg('^([0-9]+|[0-9]*\\.[0-9]{0,2})$', $this->suma)) return false;
+        if (!preg_match('/^([0-9]+|[0-9]*\\.[0-9]{0,2})$/', $this->suma)) return false;
         if ($this->mena != 'EUR') return false;
-        if (!ereg('^[0-9]{10}$', $this->vs)) return false;
-        if (!ereg('^[0-9]{10}$', $this->ss)) return false;
-        if (ereg('[\\;\\?\\&]', $this->url)) return false;
+        if (!preg_match('/^[0-9]{10}$/', $this->vs)) return false;
+        if (!preg_match('/^[0-9]{10}$/', $this->ss)) return false;
+        if (preg_match('/[\\;\\?\\&]/', $this->url)) return false;
         $results = array('OK', 'NOK');
         if (!in_array($this->result, $results)) return false;
         if (!in_array($this->real, $results)) return false;

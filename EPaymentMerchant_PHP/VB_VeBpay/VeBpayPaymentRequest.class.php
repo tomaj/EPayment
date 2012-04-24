@@ -44,11 +44,11 @@ class VeBpayPaymentRequest extends EPaymentDesSignedMessage implements IEPayment
                 $this->AMT = sprintf("%01.2F", $this->AMT);
 
             if (isempty($this->MID)) throw new Exception('Merchant ID is empty');
-            if (!ereg('^[0-9]+(\\.[0-9]+)?$', $this->AMT)) throw new Exception('Amount is in wrong format');
+            if (!preg_match('/^[0-9]+(\\.[0-9]+)?$/', $this->AMT)) throw new Exception('Amount is in wrong format');
             if (strlen($this->VS) > 10) throw new Exception('Variable Symbol is in wrong format');
-            if (!ereg('^[0-9]+$', $this->VS)) throw new Exception('Variable Symbol is in wrong format');
+            if (!preg_match('/^[0-9]+$/', $this->VS)) throw new Exception('Variable Symbol is in wrong format');
             if (strlen($this->CS) > 10) throw new Exception('Constant Symbol is in wrong format');
-            if (!ereg('^[0-9]+$', $this->CS)) throw new Exception('Constant Symbol is in wrong format');
+            if (!preg_match('/^[0-9]+$/', $this->CS)) throw new Exception('Constant Symbol is in wrong format');
             if (isempty($this->RURL)) throw new Exception('Return URL is in wrong format');
             $urlRestrictedChars = array('&', '?', ';', '=', '+', '%');
             foreach ($urlRestrictedChars as $char)

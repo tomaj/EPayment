@@ -45,12 +45,12 @@ class TatraPayPaymentRequest extends EPaymentDesSignedMessage implements IEPayme
             if (!is_string($this->AMT))
                 $this->AMT = sprintf("%01.2F", $this->AMT);
 
-            if (!eregi('^[0-9a-z]{3,4}$', $this->MID)) throw new Exception('Merchant ID is in wrong format');
-            if (!ereg('^[0-9]+(\\.[0-9]+)?$', $this->AMT)) throw new Exception('Amount is in wrong format');
+            if (!preg_match('/^[0-9a-z]{3,4}$/', $this->MID)) throw new Exception('Merchant ID is in wrong format');
+            if (!preg_match('/^[0-9]+(\\.[0-9]+)?$/', $this->AMT)) throw new Exception('Amount is in wrong format');
             if (strlen($this->VS) > 10) throw new Exception('Variable Symbol is in wrong format');
-            if (!ereg('^[0-9]+$', $this->VS)) throw new Exception('Variable Symbol is in wrong format');
+            if (!preg_match('/^[0-9]+$/', $this->VS)) throw new Exception('Variable Symbol is in wrong format');
             if (strlen($this->CS) > 4) throw new Exception('Constant Symbol is in wrong format');
-            if (!ereg('^[0-9]+$', $this->CS)) throw new Exception('Constant Symbol is in wrong format');
+            if (!preg_match('/^[0-9]+$/', $this->CS)) throw new Exception('Constant Symbol is in wrong format');
             if (isempty($this->RURL)) throw new Exception('Return URL is in wrong format');
             $urlRestrictedChars = array('&', '?', ';', '=', '+', '%');
             foreach ($urlRestrictedChars as $char)
@@ -59,14 +59,14 @@ class TatraPayPaymentRequest extends EPaymentDesSignedMessage implements IEPayme
             // nepovinne
             if (!isempty($this->SS)) {
                 if (strlen($this->SS) > 10) throw new Exception('Specific Symbol is in wrong format');
-                if (!ereg('^[0-9]+$', $this->SS)) throw new Exception('Specific Symbol is in wrong format');
+                if (!preg_match('/^[0-9]+$/', $this->SS)) throw new Exception('Specific Symbol is in wrong format');
             }
             if (!isempty($this->PT))
                 if ($this->PT != 'TatraPay') throw new Exception('Payment Type parameter must be "TatraPay"');
             if (!isempty($this->RSMS))
-                if (!ereg('^(0|\\+421)9[0-9]{2}( ?[0-9]{3}){2}$', $this->RSMS)) throw new Exception('Return SMS in wrong format.');
+                if (!preg_match('/^(0|\\+421)9[0-9]{2}( ?[0-9]{3}){2}$/', $this->RSMS)) throw new Exception('Return SMS in wrong format.');
             if (!isempty($this->REM))
-                if (!eregi('^[0-9a-z_]+(\.[0-9a-z_]+)*@([12]?[0-9]{0,2}(\.[12]?[0-9]{0,2}){3}|([a-z][0-9a-z\-]*\.)+[a-z]{2,6})$', $this->REM)) throw new Exception('Return e-mail address in wrong format');
+                if (!preg_match('/^[0-9a-z_]+(\.[0-9a-z_]+)*@([12]?[0-9]{0,2}(\.[12]?[0-9]{0,2}){3}|([a-z][0-9a-z\-]*\.)+[a-z]{2,6})$/', $this->REM)) throw new Exception('Return e-mail address in wrong format');
             if (!isempty($this->DESC))
                 if (strlen($this->DESC) > 20) throw new Exception('Description is too long');
             if (!isempty($this->LANG)) {

@@ -43,20 +43,20 @@ class UniPlatbaPaymentRequest extends EPaymentDesSignedMessage implements IEPaym
             if (!is_string($this->AMT))
                 $this->AMT = sprintf("%01.2F", $this->AMT);
 
-            if (!eregi('^[0-9]{1,13}\\.[0-9]{2}$', $this->AMT)) throw new Exception('Amount must be a decimal number with 2 digits after period delimiter.');
-            if (!eregi('^[0-9]{1,10}$', $this->MID)) throw new Exception('Merchant ID is in wrong format');
+            if (!preg_match('/^[0-9]{1,13}\\.[0-9]{2}$/', $this->AMT)) throw new Exception('Amount must be a decimal number with 2 digits after period delimiter.');
+            if (!preg_match('/^[0-9]{1,10}$/', $this->MID)) throw new Exception('Merchant ID is in wrong format');
             $validLanguages = array('SK', 'EN');
             if (!in_array($this->LNG, $validLanguages)) throw new Exception('Unknown language, known languages are: '.implode(',', $validLanguages));
-            if (!ereg('^[0-9]{1,13}(\\.[0-9]{1,2})?$', $this->AMT)) throw new Exception('Amount is in wrong format');
+            if (!preg_match('/^[0-9]{1,13}(\\.[0-9]{1,2})?$/', $this->AMT)) throw new Exception('Amount is in wrong format');
             if (strlen($this->VS) > 10) throw new Exception('Variable Symbol is in wrong format');
-            if (!ereg('^[0-9]+$', $this->VS)) throw new Exception('Variable Symbol is in wrong format');
+            if (!preg_match('/^[0-9]+$/', $this->VS)) throw new Exception('Variable Symbol is in wrong format');
             if (strlen($this->CS) != 4) throw new Exception('Constant Symbol must be 4 digits long');
-            if (!ereg('^[0-9]+$', $this->CS)) throw new Exception('Constant Symbol is in wrong format');
+            if (!preg_match('/^[0-9]+$/', $this->CS)) throw new Exception('Constant Symbol is in wrong format');
 
             // nepovinne
             if (!isempty($this->SS)) {
                 if (strlen($this->SS) > 10) throw new Exception('Specific Symbol is in wrong format');
-                if (!ereg('^[0-9]+$', $this->SS)) throw new Exception('Specific Symbol is in wrong format');
+                if (!preg_match('/^[0-9]+$/', $this->SS)) throw new Exception('Specific Symbol is in wrong format');
             }
             if (!isempty($this->DESC)) {
                 if (strlen($this->DESC) > 35) throw new Exception('Description is too long');

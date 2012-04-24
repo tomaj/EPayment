@@ -51,21 +51,21 @@ class EPlatbaPaymentRequest extends EPaymentHmacSignedMessage implements IEPayme
         //echo "VS:";
         if (isempty($this->VS)) return false;
         if (strlen($this->VS) > 10) return false;
-        if (!ereg('^[0-9]+$', $this->VS)) return false;
+        if (!preg_match('/^[0-9]+$/', $this->VS)) return false;
 
         //echo "CS:";
         if (isempty($this->CS)) return false;
         if (strlen($this->CS) > 4) return false;
-        if (!ereg('^[0-9]+$', $this->CS)) return false;
+        if (!preg_match('/^[0-9]+$/', $this->CS)) return false;
 
         //echo "RURL:";
         if (isempty($this->RURL)) return false;
-        if (!eregi("^https?://.+$", $this->RURL)) return false;
+        if (!preg_match("~^https?://.+$~", $this->RURL)) return false;
 
         if (!isempty($this->SS)) {
             //echo "SS:";
             if (strlen($this->SS) > 10) return false;
-            if (!ereg('^[0-9]+$', $this->SS)) return false;
+            if (!preg_match('/^[0-9]+$/', $this->SS)) return false;
         }
 
         return true;

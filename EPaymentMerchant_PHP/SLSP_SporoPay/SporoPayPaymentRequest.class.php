@@ -41,15 +41,15 @@ class SporoPayPaymentRequest extends EPayment3DesSignedMessage implements IEPaym
         if (!is_string($this->suma))
             $this->suma = sprintf("%01.2F", $this->suma);
 
-        if (!ereg('^[0-9]*$', $this->pu_predcislo)) return false;
-        if (!ereg('^[0-9]+$', $this->pu_cislo)) return false;
+        if (!preg_match('/^[0-9]*$/', $this->pu_predcislo)) return false;
+        if (!preg_match('/^[0-9]+$/', $this->pu_cislo)) return false;
         // kbanky - konstanta
-        if (!ereg('^([0-9]+|[0-9]*\\.[0-9]{0,2})$', $this->suma)) return false;
+        if (!preg_match('/^([0-9]+|[0-9]*\\.[0-9]{0,2})$/', $this->suma)) return false;
         // mena - konstanta
-        if (!ereg('^[0-9]{10}$', $this->vs)) return false;
-        if (!ereg('^[0-9]{10}$', $this->ss)) return false;
-        if (ereg('[\\;\\?\\&]', $this->url)) return false;
-        if (ereg('[\\;\\?\\&]', $this->param)) return false;
+        if (!preg_match('/^[0-9]{10}$/', $this->vs)) return false;
+        if (!preg_match('/^[0-9]{10}$/', $this->ss)) return false;
+        if (preg_match('/[\\;\\?\\&]/', $this->url)) return false;
+        if (preg_match('/[\\;\\?\\&]/', $this->param)) return false;
 
         return true;
     }
