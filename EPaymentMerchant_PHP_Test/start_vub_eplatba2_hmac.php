@@ -11,107 +11,150 @@
 
 	MONOGRAM EPayment libraries is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 	GNU Lesser General Public License for more details.
 
 	You should have received a copy of the GNU Lesser General Public License
-	along with MONOGRAM EPayment libraries.  If not, see <http://www.gnu.org/licenses/>.
+	along with MONOGRAM EPayment libraries.	If not, see <http://www.gnu.org/licenses/>.
 */
 
-  require_once 'constants.php';
-  
-  $protocol = 'http';
-  if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
-    $protocol = 'https';
-  }
-  
-  $returnUrl = $protocol.'://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF']).'/return_vub_eplatba2_hmac.php';
-  
-  $prFields = array(
-    'MID' => VUB_EPLATBA2_HMAC_MID,
-    'AMT' => '100.00',
-    'VS' => str_pad(mt_rand(0, 9999999999), 10, '0', STR_PAD_LEFT),
-    'CS' => '0308',
-    'RURL' => $returnUrl,
-    'SS' => null,
-    'DESC' => null,
-    'REM' => null,
-    'RSMS' => null
-  );
+	require_once 'constants.php';
+	
+	$protocol = 'http';
+	if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+		$protocol = 'https';
+	}
+	
+	$returnUrl = $protocol.'://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF']).'/return_vub_eplatba2_hmac.php';
+	
+	$prFields = array(
+		'MID' => VUB_EPLATBA2_HMAC_MID,
+		'AMT' => '100.00',
+		'VS' => str_pad(mt_rand(0, 9999999999), 10, '0', STR_PAD_LEFT),
+		'CS' => '0308',
+		'RURL' => $returnUrl,
+		'SS' => null,
+		'DESC' => null,
+		'REM' => null,
+		'RSMS' => null
+	);
 ?>
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>MONOGRAM EPayment Libraries for PHP</title>
-  </head>
-  <body>
-    <h1>MONOGRAM EPayment Libraries for PHP</h1>
-    <form action="?" method="post">
-      <table>
+<head>
+	<title>VUB Eplatba2 / MONOGRAM EPayment Libraries for PHP</title>
+	<link href="resources/css/bootstrap.css" rel="stylesheet">
+	<link href="resources/css/docs.css" rel="stylesheet">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="brand" href="http://www.monogram.sk/">MONOGRAM</a>
+				<ul class="nav">
+					<li>
+						<a href="index.php">Home</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="page-header">
+			<h1>VUB Eplatba2 <small> MONOGRAM EPayment Libraries for PHP</small></h1>
+		</div>
+
+		<form action="?" method="post" class="well form-horizontal">
+			<fieldset>
 <?php
-  foreach ($prFields as $key => $value) {
-    $outValue = $value;
-    if (isset($_POST['fields'][$key]['value'])) {
-      $outValue = $_POST['fields'][$key]['value'];
-    }
-    $outValue = htmlentities($outValue, ENT_QUOTES);
-    
-    echo "<tr><td>{$key}</td><td>";
-    if ($value == null) {
-      echo "<input type=\"checkbox\" name=\"fields[$key][set]\" value=\"1\"".(empty($outValue) ? '' : ' checked="checked"')." /> ";
-    }
-    echo "<input type=\"text\" name=\"fields[{$key}][value]\" value=\"{$outValue}\" /></td></tr>\n";
-    
-  }
+	foreach ($prFields as $key => $value) {
+		echo '<div class="control-group">';
+		$outValue = $value;
+		if (isset($_POST['fields'][$key]['value'])) {
+			$outValue = $_POST['fields'][$key]['value'];
+		}
+		$outValue = htmlentities($outValue, ENT_QUOTES);
+		
+		echo "<label class=\"control-label\">{$key}</label>";
+		echo '<div class="controls">';
+		if ($value == null) {
+			echo "<input type=\"checkbox\" name=\"fields[$key][set]\" value=\"1\"".(empty($outValue) ? '' : ' checked="checked"')." /> ";
+		}
+		echo "<input type=\"text\" class=\"input-xxlarge\" name=\"fields[{$key}][value]\" value=\"{$outValue}\" /></td></tr>\n";
+		echo "</div></div>";
+	}
 ?>
-        <tr><td></td><td><input type="submit" name="dopayment" value="Create payment request" /></td></tr>
-      </table>
-    </form>
+				<div class="form-actions">
+					<input type="submit" class="btn btn-large btn-primary" name="dopayment" value="Create payment request" /></td></tr>
+				</div>
+			</fieldset>
+		</form>
+
 <?php
-  if (isset($_POST['dopayment'])) {
-    require_once dirname(dirname(__FILE__)).'/EPaymentMerchant_PHP/VUB_EPlatba2_HMAC/EPlatbaPaymentRequest.class.php';
-    
-    $pr = new EPlatbaPaymentRequest();
-    foreach ($prFields as $key => $value) {
-      $outValue = $value;
-      
-      if ($value === null) {
-        if (isset($_POST['fields'][$key]['set']) && ($_POST['fields'][$key]['set'])) {
-          $outValue = $_POST['fields'][$key]['value'];
-        }
-      } else {
-        $outValue = $_POST['fields'][$key]['value'];
-      }
-      
-      if (!($outValue === null)) {
-        $pr->$key = $outValue;
-      }
-    }
-    
-    $pr->SetRedirectUrlBase(VUB_EPLATBA2_HMAC_REDIRECTURLBASE);
-    
-    $validationResult = $pr->validate();
-    if ($validationResult) {
-      echo "Validation OK<br />";
-      
-      $pr->SignMessage(VUB_EPLATBA2_HMAC_SHAREDSECRET);
-      
-      echo "Message signed<br />";
-      
-      $payReq = $pr->GetPaymentRequestFields();
-			echo "Payment request:<br />";
-			echo "<form action=\"".$pr->GetUrlBase()."\" method=\"post\">";
-			foreach ($payReq as $k => $v) {
-				echo "{$k}: <input type=\"text\" name=\"$k\" value=\"$v\" /></br />";
+	if (isset($_POST['dopayment'])) {
+		require_once dirname(dirname(__FILE__)).'/EPaymentMerchant_PHP/VUB_EPlatba2_HMAC/EPlatbaPaymentRequest.class.php';
+		
+		$pr = new EPlatbaPaymentRequest();
+		foreach ($prFields as $key => $value) {
+			$outValue = $value;
+			
+			if ($value === null) {
+				if (isset($_POST['fields'][$key]['set']) && ($_POST['fields'][$key]['set'])) {
+					$outValue = $_POST['fields'][$key]['value'];
+				}
+			} else {
+				$outValue = $_POST['fields'][$key]['value'];
 			}
-			echo "<input type=\"submit\" value=\"Send payment request\" />";
+			
+			if (!($outValue === null)) {
+				$pr->$key = $outValue;
+			}
+		}
+		
+		$pr->SetRedirectUrlBase(VUB_EPLATBA2_HMAC_REDIRECTURLBASE);
+		
+		$validationResult = $pr->validate();
+		if ($validationResult) {
+			echo "<div class=\"alert alert-success\">";
+			echo "<strong>Validation OK</strong><br />";
+			
+			$pr->SignMessage(VUB_EPLATBA2_HMAC_SHAREDSECRET);
+			
+			echo "Message signed<br />";
+			
+			$payReq = $pr->GetPaymentRequestFields();
+			echo "Payment request:<br />";
+
+			echo "<form action=\"".$pr->GetUrlBase()."\" method=\"post\" class=\"form-horizontal\">";
+			echo "<div class=\"controls\">";
+			foreach ($payReq as $k => $v) {
+				echo "<div class=\"control-group\">";
+				echo "<label class=\"control-label\">{$k}:</label> <div class=\"controls\"><input class=\"input-large\" type=\"text\" name=\"$k\" value=\"$v\" /></div>";
+				echo "</div>";
+			}
+			echo "<input class=\"btn btn-large btn-primary\" type=\"submit\" value=\"Send payment request\" />";
+			echo "</div>";
 			echo "</form>";
-    } else {
-      echo "Validation failed<br />";
-    }
-  }
+
+			echo "</div>";
+		} else {
+			echo "<div class=\"alert alert-error\"><strong>Validation failed</strong></div>";
+		}
+	}
 ?>
-    <p>
-      <a href="index.php">New payment</a>
-    </p>
-  </body>
+		<p>
+			<a href="index.php" class="btn">New payment</a>
+		</p>
+
+		<footer class="footer">
+			<p class="pull-right">
+				<a href="#">Back to top</a>
+			</p>
+			<p>
+				<a href="http://epayment.monogram.sk/" target="_blank">MONOGRAM EPayment</a> libraries is distributed in the hope that it will be useful
+			</p>
+		</footer>
+	</div>
+</body>
 </html>

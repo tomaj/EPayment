@@ -18,52 +18,78 @@
 	along with MONOGRAM EPayment libraries.  If not, see <http://www.gnu.org/licenses/>.
 */
 ?>
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>MONOGRAM EPayment Libraries for PHP</title>
-  </head>
-  <body>
-    <h1>MONOGRAM EPayment Libraries for PHP</h1>
+<head>
+	<title>MONOGRAM EPayment Libraries for PHP</title>
+	<link href="resources/css/bootstrap.css" rel="stylesheet">
+	<link href="resources/css/docs.css" rel="stylesheet">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="brand" href="http://www.monogram.sk/">MONOGRAM</a>
+				<ul class="nav">
+					<li>
+						<a href="index.php">Home</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="page-header">
+			<h1>SLSP Sporopay <small>MONOGRAM EPayment Libraries for PHP</small></h1>
+		</div>
 <?php
-  require_once dirname(__FILE__).'/constants.php';
-  $fields = array('u_predcislo', 'u_cislo', 'u_kbanky', 'pu_predcislo', 'pu_cislo', 'pu_kbanky', 'suma', 'mena', 'vs', 'ss', 'url', 'param', 'result', 'real', 'SIGN2');
-  
-  require_once dirname(dirname(__FILE__)).'/EPaymentMerchant_PHP/SLSP_SporoPay/SporoPayPaymentHttpResponse.class.php';
-  $pres = new SporoPayPaymentHttpResponse();
-  
-  if ($pres->Validate()) {
-    echo 'Received message is valid.<br />';
-    
-    if ($pres->VerifySignature(SLSP_SPOROPAY_SHAREDSECRET)) {
-      echo 'Received message passed integrity and authenticity check.<br />';
-      
-      $result = $pres->GetPaymentResponse();
-      
-      echo '<strong>Payment result: ';
-      if ($result == IEPaymentHttpPaymentResponse::RESPONSE_SUCCESS) {
-        echo 'SUCCESS';
-      } else if ($result == IEPaymentHttpPaymentResponse::RESPONSE_FAIL) {
-        echo 'FAIL';
-      } else if ($result == IEPaymentHttpPaymentResponse::RESPONSE_TIMEOUT) {
-        echo 'TIMEOUT';
-      }
-      echo '</strong><br />';
-      
-      echo '<table>';
-      foreach ($fields as $fname) {
-        echo "<tr><td>{$fname}</td><td>{$pres->$fname}</td></tr>\n";
-      }
-      echo '</table>';
-    } else {
-      echo 'Received message failed integrity and authenticity check.';
-    }
-  } else {
-    echo 'Received message failed validation.';
-  }
+	require_once dirname(__FILE__).'/constants.php';
+	$fields = array('u_predcislo', 'u_cislo', 'u_kbanky', 'pu_predcislo', 'pu_cislo', 'pu_kbanky', 'suma', 'mena', 'vs', 'ss', 'url', 'param', 'result', 'real', 'SIGN2');
+
+	require_once dirname(dirname(__FILE__)).'/EPaymentMerchant_PHP/SLSP_SporoPay/SporoPayPaymentHttpResponse.class.php';
+	$pres = new SporoPayPaymentHttpResponse();
+
+	if ($pres->Validate()) {
+		echo '<div class="alert alert-success">Received message is valid.</div>';
+
+		if ($pres->VerifySignature(SLSP_SPOROPAY_SHAREDSECRET)) {
+			echo '<div class="alert alert-success">Received message passed integrity and authenticity check.</div>';
+
+			$result = $pres->GetPaymentResponse();
+
+			echo '<p>Payment result: <strong>';
+			if ($result == IEPaymentHttpPaymentResponse::RESPONSE_SUCCESS) {
+				echo '<span class="label label-success">SUCCESS</span>';
+			} else if ($result == IEPaymentHttpPaymentResponse::RESPONSE_FAIL) {
+				echo '<span class="label label-important">FAIL</span>';
+			} else if ($result == IEPaymentHttpPaymentResponse::RESPONSE_TIMEOUT) {
+				echo '<span class="label label-warning">TIMEOUT</span>';
+			}
+			echo '</strong></p>';
+
+			echo '<table class="table table-bordered table-striped"><tbody>';
+			foreach ($fields as $fname) {
+				echo "<tr><td>{$fname}</td><td>{$pres->$fname}</td></tr>\n";
+			}
+			echo '</tbody></table>';
+		} else {
+			echo '<div class="alert alert-error">Received message failed integrity and authenticity check.</div>';
+		}
+	} else {
+		echo '<div class="alert alert-success">Received message failed validation.</div>';
+	}
 ?>
-    <p>
-      <a href="index.php">New payment</a>
-    </p>
-  </body>
+		<p>
+			<a class="btn" href="index.php">New payment</a>
+		</p>
+		<footer class="footer">
+			<p class="pull-right">
+				<a href="#">Back to top</a>
+			</p>
+			<p>
+				<a href="http://epayment.monogram.sk/" target="_blank">MONOGRAM EPayment</a> libraries is distributed in the hope that it will be useful
+			</p>
+		</footer>
+	  </div>
+</body>
 </html>
-  

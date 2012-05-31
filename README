@@ -1,4 +1,4 @@
-NOGRAM EPayment knižnice implementujú platobné systémy niektorých slovenských bánk. Ich uplatnenie sa nájde najmä v e-shopoch, ale aj v portáloch, v ktorých si používateľ môže kupovať obsah, kredit alebo konto. Použitím EPayment protokolov získate hlavne okamžitú informáciu o platbe a používateľovi teda môžete okamžite poskytnúť obsah, prípadne expedovať tovar.
+MONOGRAM EPayment knižnice implementujú platobné systémy niektorých slovenských bánk. Ich uplatnenie sa nájde najmä v e-shopoch, ale aj v portáloch, v ktorých si používateľ môže kupovať obsah, kredit alebo konto. Použitím EPayment protokolov získate hlavne okamžitú informáciu o platbe a používateľovi teda môžete okamžite poskytnúť obsah, prípadne expedovať tovar.
 
 MONOGRAM EPayment knižnice sú dostupné ako v PHP tak aj v C# verzii a teda použiteľné vo väčšine webových projektov.
 
