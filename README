@@ -6,10 +6,12 @@ Pre použitie EPayment protokolov samozrejme musíte mať  túto službu u danej
 
 A to najlepšie nakoniec: MONOGRAM EPayment knižnice sú opensource a zadarmo pre každého, konkrétne informácie [o licenciách nájdete tu](https://github.com/tomaj/EPayment/wiki/Licencia).
 
-##Ďalšie užitočné linky
+***
 
- * [Ako pouzivat](https://github.com/tomaj/EPayment/wiki/Ako-použ%C3%ADvať)
- ** [PHP](https://github.com/tomaj/EPayment/wiki/Ako-použivať-PHP)
- ** [C#](https://github.com/tomaj/EPayment/wiki/Ako-použ%C3%ADvať-.NET)
- * [FAQ](https://github.com/tomaj/EPayment/wiki/FAQ)
+## Ďalšie užitočné linky
+
+* [Ako pouzivat](https://github.com/tomaj/EPayment/wiki/Ako-použ%C3%ADvať)
+** [PHP](https://github.com/tomaj/EPayment/wiki/Ako-použivať-PHP)
+** [C#](https://github.com/tomaj/EPayment/wiki/Ako-použ%C3%ADvať-.NET)
+* [FAQ](https://github.com/tomaj/EPayment/wiki/FAQ)
 
