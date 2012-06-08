@@ -21,7 +21,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>MONOGRAM EPayment Libraries for PHP</title>
+	<title>SLSP Sporopay / MONOGRAM EPayment Libraries for PHP</title>
 	<link href="resources/css/bootstrap.css" rel="stylesheet">
 	<link href="resources/css/docs.css" rel="stylesheet">
 </head>
@@ -90,6 +90,6 @@
 				<a href="http://epayment.monogram.sk/" target="_blank">MONOGRAM EPayment</a> libraries is distributed in the hope that it will be useful
 			</p>
 		</footer>
-	  </div>
+	</div>
 </body>
 </html>

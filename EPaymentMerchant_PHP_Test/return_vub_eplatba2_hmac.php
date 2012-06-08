@@ -18,50 +18,77 @@
 	along with MONOGRAM EPayment libraries.  If not, see <http://www.gnu.org/licenses/>.
 */
 ?>
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>MONOGRAM EPayment Libraries for PHP</title>
-  </head>
-  <body>
-    <h1>MONOGRAM EPayment Libraries for PHP</h1>
+<head>
+	<title>VUB Eplatba2 / MONOGRAM EPayment Libraries for PHP</title>
+	<link href="resources/css/bootstrap.css" rel="stylesheet">
+	<link href="resources/css/docs.css" rel="stylesheet">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="brand" href="http://www.monogram.sk/">MONOGRAM</a>
+				<ul class="nav">
+					<li>
+						<a href="index.php">Home</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="page-header">
+			<h1>VUB Eplatba2 <small>MONOGRAM EPayment Libraries for PHP</small></h1>
+		</div>
 <?php
-  require_once dirname(__FILE__).'/constants.php';
-  $fields = array('SS', 'VS', 'RES', 'SIGN');
+	require_once dirname(__FILE__).'/constants.php';
+	$fields = array('SS', 'VS', 'RES', 'SIGN');
   
-  require_once dirname(dirname(__FILE__)).'/EPaymentMerchant_PHP/VUB_EPlatba2_HMAC/EPlatbaPaymentHttpResponse.class.php';
-  $pres = new EPlatbaPaymentHttpResponse();
+	require_once dirname(dirname(__FILE__)).'/EPaymentMerchant_PHP/VUB_EPlatba2_HMAC/EPlatbaPaymentHttpResponse.class.php';
+	$pres = new EPlatbaPaymentHttpResponse();
   
-  if ($pres->Validate()) {
-    echo 'Received message is valid.<br />';
+	if ($pres->Validate()) {
+		echo '<div class="alert alert-success">Received message is valid.</div>';
     
-    if ($pres->VerifySignature(VUB_EPLATBA2_HMAC_SHAREDSECRET)) {
-      echo 'Received message passed integrity and authenticity check.<br />';
+		if ($pres->VerifySignature(VUB_EPLATBA2_HMAC_SHAREDSECRET)) {
+			echo '<div class="alert alert-success">Received message passed integrity and authenticity check.</div>';
       
-      $result = $pres->GetPaymentResponse();
+			$result = $pres->GetPaymentResponse();
       
-      echo '<strong>Payment result: ';
-      if ($result == IEPaymentHttpPaymentResponse::RESPONSE_SUCCESS) {
-        echo 'SUCCESS';
-      } else if ($result == IEPaymentHttpPaymentResponse::RESPONSE_FAIL) {
-        echo 'FAIL';
-      }
-      echo '</strong><br />';
+			echo '<p>Payment result: <strong>';
+			if ($result == IEPaymentHttpPaymentResponse::RESPONSE_SUCCESS) {
+				echo '<span class="label label-success">SUCCESS</span>';
+			} else if ($result == IEPaymentHttpPaymentResponse::RESPONSE_FAIL) {
+				echo '<span class="label label-important">FAIL</span>';
+			}
+			echo '</strong></p>';
       
-      echo '<table>';
-      foreach ($fields as $fname) {
-        echo "<tr><td>{$fname}</td><td>{$pres->$fname}</td></tr>\n";
-      }
-      echo '</table>';
-    } else {
-      echo 'Received message failed integrity and authenticity check.';
-    }
-  } else {
-    echo 'Received message failed validation.';
-  }
+			echo '<table class="table table-bordered table-striped"><tbody>';
+			foreach ($fields as $fname) {
+				echo "<tr><td>{$fname}</td><td>{$pres->$fname}</td></tr>\n";
+			}
+			echo '</tbody></table>';
+		} else {
+			echo '<div class="alert alert-error">Received message failed integrity and authenticity check.</div>';
+		}
+	} else {
+		echo '<div class="alert alert-success">Received message failed validation.</div>';
+	}
 ?>
-    <p>
-      <a href="index.php">New payment</a>
-    </p>
-  </body>
+		<p>
+			<a class="btn" href="index.php">New payment</a>
+		</p>
+		<footer class="footer">
+			<p class="pull-right">
+				<a href="#">Back to top</a>
+			</p>
+			<p>
+				<a href="http://epayment.monogram.sk/" target="_blank">MONOGRAM EPayment</a> libraries is distributed in the hope that it will be useful
+			</p>
+		</footer>
+	</div>
+</body>
 </html>
   
