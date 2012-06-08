@@ -11,7 +11,7 @@ A to najlepšie nakoniec: MONOGRAM EPayment knižnice sú opensource a zadarmo p
 ## Ďalšie užitočné linky
 
 * [Ako pouzivat](https://github.com/tomaj/EPayment/wiki/Ako-použ%C3%ADvať)
-** [PHP](https://github.com/tomaj/EPayment/wiki/Ako-použivať-PHP)
-** [C#](https://github.com/tomaj/EPayment/wiki/Ako-použ%C3%ADvať-.NET)
+ * [PHP](https://github.com/tomaj/EPayment/wiki/Ako-použivať-PHP)
+ * [C#](https://github.com/tomaj/EPayment/wiki/Ako-použ%C3%ADvať-.NET)
 * [FAQ](https://github.com/tomaj/EPayment/wiki/FAQ)
 
