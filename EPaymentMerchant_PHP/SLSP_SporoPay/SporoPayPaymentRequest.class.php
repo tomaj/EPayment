@@ -78,8 +78,8 @@ class SporoPayPaymentRequest extends EPayment3DesSignedMessage implements IEPaym
             $url .= "&acc_prefix={$this->acc_prefix}";
         if (!isempty($this->acc_number))
             $url .= "&acc_number={$this->acc_number}";
-        if (!isempty($this->mail_notif_att))
-            $url .= "&mail_notif_att={$this->mail_notif_att}";
+        if (!isempty($this->mail_notify_att))
+            $url .= "&mail_notify_att={$this->mail_notify_att}";
         if (!isempty($this->email_adr))
             $url .= "&email_adr=".urlencode($this->email_adr);
         if (!isempty($this->client_login))
