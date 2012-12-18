@@ -29,7 +29,7 @@ class SporoPayPaymentRequest extends EPayment3DesSignedMessage implements IEPaym
 
     public function __construct() {
         $this->requiredFields = array('pu_predcislo', 'pu_cislo', 'pu_kbanky', 'suma', 'mena', 'vs', 'ss', 'url', 'param');
-        $this->optionalFields = array('acc_prefix', 'acc_number', 'mail_notif_att', 'email_adr', 'client_login', 'auth_tool_type');
+        $this->optionalFields = array('acc_prefix', 'acc_number', 'mail_notify_att', 'email_adr', 'client_login', 'auth_tool_type');
 
         $this->pu_kbanky = '0900'; // konstanta v protokole v052006
         $this->mena = 'EUR'; // konstanta v protokole v052006
