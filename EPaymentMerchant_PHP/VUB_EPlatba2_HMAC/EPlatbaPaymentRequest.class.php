@@ -88,10 +88,10 @@ class EPlatbaPaymentRequest extends EPaymentHmacSignedMessage implements IEPayme
         'RURL'=> $this->RURL,
         'SIGN'=> $this->SIGN
       );
-      if (!empty($this->SS))    $res['SS']   =  $this->SS;
-      if (!empty($this->DESC))  $res['DESC'] =  $this->DESC;
-      if (!empty($this->REM))   $res['REM']  =  $this->REM;
-      if (!empty($this->RSMS))  $res['RSMS'] =  $this->RSMS;
+      if (!isempty($this->SS))    $res['SS']   =  $this->SS;
+      if (!isempty($this->DESC))  $res['DESC'] =  $this->DESC;
+      if (!isempty($this->REM))   $res['REM']  =  $this->REM;
+      if (!isempty($this->RSMS))  $res['RSMS'] =  $this->RSMS;
       return $res;
     }
     
